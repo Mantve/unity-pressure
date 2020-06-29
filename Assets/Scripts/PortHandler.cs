@@ -43,9 +43,10 @@ public class PortHandler : MonoBehaviour
          {
             Debug.Log("Open!");
             buffer += sp.ReadExisting();
-            if (buffer.Contains("kg"))
+            if (buffer.Contains("M") && buffer.Contains("D"))
             {
                 d = buffer.Split('+')[1].Split('k')[0];
+
                 try
                 {
                     kg = Convert.ToInt32(d.Split(',')[0]);

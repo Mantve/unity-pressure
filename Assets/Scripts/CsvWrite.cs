@@ -25,7 +25,7 @@ public class CsvWrite : MonoBehaviour
     {
         //if (counter < 100)
         //{
-          //  writer.WriteLine(line + "," + Time.timeSinceLevelLoad);
+            writer.WriteLine(line + "," + Time.timeSinceLevelLoad);
           //  counter++;
         //}
         //else if (counter++ == 100)

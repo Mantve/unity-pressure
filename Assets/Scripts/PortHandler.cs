@@ -13,12 +13,16 @@ public class PortHandler : MonoBehaviour
     public Text data;
     public Text MReceived;
     public Text PortNotif;
+    
 
     private SerialPort sp;
 
-
+    private CsvWrite csv;
     private bool Connected;
     private bool read;
+    private bool bullet;
+
+    private int count;
 
 
     private byte[] buffer;
@@ -28,8 +32,12 @@ public class PortHandler : MonoBehaviour
     void Start()
     {
         grafas = GameObject.Find("Canvas").GetComponent<Graph>();
+        csv = GameObject.Find("CSV").GetComponent<CsvWrite>();
         Connected = false;
         read = false;
+        bullet = false;
+
+        count = 0;
         buffer = new byte[2];
         try
         {
@@ -45,8 +53,14 @@ public class PortHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        string d;
-         if (sp.IsOpen && read && sp.BytesToRead > 1 )
+       //string d;
+         if(count < 10 && sp.IsOpen && read && sp.BytesToRead > 1)
+         {
+            count++;
+            buffer[0] = (byte)sp.ReadByte();
+            buffer[1] = (byte)sp.ReadByte();
+         }
+         else if (sp.IsOpen && read && sp.BytesToRead > 1 )
          {
             Debug.Log("Open!");
             buffer[0] = (byte)sp.ReadByte();
@@ -57,9 +71,22 @@ public class PortHandler : MonoBehaviour
             data.text = bait.ToString();
             kg = (int)bait;
 
-           grafas.data.RemoveAt(0);
-            grafas.data.Add(kg);
-            grafas.Draw(grafas.data);
+            if ( (bullet || kg > 700) && count < 100)
+            {
+                count++;
+                bullet = true;
+                csv.Write(kg.ToString());
+                grafas.data.RemoveAt(0);
+                grafas.data.Add(kg);
+                grafas.Draw(grafas.data);
+            } else if (count == 100)
+            {
+                csv.Finish();
+            }
+
+
+
+
 
 
 

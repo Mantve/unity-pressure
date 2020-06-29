@@ -74,7 +74,7 @@ public class Graph : MonoBehaviour
             return;
         for (int i = 0; i < vertexAmount && i < decibels.Count; i++)
         {
-            int _index = decibels.Count - i - 1;
+            int _index = i;
 
             float y = decibels[_index] * (graphHeight / maxV ); //(Divide grapheight with the maximum value of decibels.
             float x = i * xInterval;

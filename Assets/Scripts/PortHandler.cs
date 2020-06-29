@@ -22,10 +22,12 @@ public class PortHandler : MonoBehaviour
 
 
     private byte[] buffer;
+    Graph grafas;
 
     // Start is called before the first frame update
     void Start()
     {
+        grafas = GameObject.Find("Canvas").GetComponent<Graph>();
         Connected = false;
         read = false;
         buffer = new byte[2];
@@ -55,31 +57,34 @@ public class PortHandler : MonoBehaviour
             data.text = bait.ToString();
             kg = (int)bait;
 
+           grafas.data.RemoveAt(0);
+            grafas.data.Add(kg);
+            grafas.Draw(grafas.data);
 
 
 
 
             //if (buffer.Contains("M") && buffer.Contains("D"))
             //{
-                //if (buffer.Contains("+"))
-                //    d = buffer.Split('+')[1].Split('k')[0];
-                //else if (buffer.Contains("-"))
-                //    d = buffer.Split('-')[1].Split('k')[0];
-                //else d = "0";
+            //if (buffer.Contains("+"))
+            //    d = buffer.Split('+')[1].Split('k')[0];
+            //else if (buffer.Contains("-"))
+            //    d = buffer.Split('-')[1].Split('k')[0];
+            //else d = "0";
 
-                //try
-                //{
-                //    kg = Convert.ToInt32(d.Split(',')[0]);
+            //try
+            //{
+            //    kg = Convert.ToInt32(d.Split(',')[0]);
 
-                //}
-                //catch
-                //{
-                //    kg = 0;
-                //}
-                //Debug.Log(kg);
-                //data.text = "M = " + d + "kg";
-                //buffer = "";
-                //}
+            //}
+            //catch
+            //{
+            //    kg = 0;
+            //}
+            //Debug.Log(kg);
+            //data.text = "M = " + d + "kg";
+            //buffer = "";
+            //}
         }
     }
 

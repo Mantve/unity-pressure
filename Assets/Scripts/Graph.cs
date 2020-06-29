@@ -14,7 +14,7 @@ public class Graph : MonoBehaviour
 
     [SerializeField] GameObject parentCanvas;
     [SerializeField] Transform line;
-    [SerializeField] List<int> data = new List<int>();
+   public List<int> data = new List<int>();
    public  int maxV=100;
     [SerializeField] int timer;
     PortHandler portdata;
@@ -33,17 +33,17 @@ public class Graph : MonoBehaviour
 
         xInterval = graphWidth / vertexAmount;
 
-        for(int i=0;i<50;i++)
-            data.Add( 0);
+        for(int i=0;i<101;i++)
+           data.Add( 0);
         
     }
 
     void FixedUpdate()
     {
-        Draw(data);
-      data.RemoveAt(0);
+                                                                                   //   Draw(data);
+                                                                                     // data.RemoveAt(0);
         //  int num = Mathf.Abs(data[data.Count-1] + Random.Range(-10, 10));
-        int num = portdata.kg ;
+        int num = portdata.kg;
        // int num = Mathf.Abs((int)Input.mousePosition.y/10);
 
         /*  timer--;
@@ -65,7 +65,7 @@ public class Graph : MonoBehaviour
               }
 
           }*/
-        data.Add(num);
+                                                                                    // data.Add(num);
     }
 
     public void Draw(List<int> decibels)

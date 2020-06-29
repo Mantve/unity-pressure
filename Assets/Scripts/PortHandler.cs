@@ -17,13 +17,15 @@ public class PortHandler : MonoBehaviour
 
     private bool Connected;
     private bool read;
-    private string buffer;
+
+    private byte[] buffer;
 
     // Start is called before the first frame update
     void Start()
     {
         Connected = false;
         read = false;
+        buffer = new byte[2];
         try
         {
             sp = new SerialPort(Port, 9600);
@@ -39,31 +41,37 @@ public class PortHandler : MonoBehaviour
     void Update()
     {
         string d;
-         if (sp.IsOpen && read && sp.BytesToRead > 0 )
+         if (sp.IsOpen && read && sp.BytesToRead > 1 )
          {
             Debug.Log("Open!");
-            buffer += sp.ReadExisting();
-            if (buffer.Contains("M") && buffer.Contains("D"))
-            {
-                if (buffer.Contains("+"))
-                    d = buffer.Split('+')[1].Split('k')[0];
-                else if (buffer.Contains("-"))
-                    d = buffer.Split('-')[1].Split('k')[0];
-                else d = "0";
+            buffer[1] = (byte)sp.ReadByte();
+            buffer[0] = (byte)sp.ReadByte();
 
-                try
-                {
-                    kg = Convert.ToInt32(d.Split(',')[0]);
+            short bait = BitConverter.ToInt16(buffer, 0);
 
-                }
-                catch
-                {
-                    kg = 0;
-                }
-                Debug.Log(kg);
-                data.text = "M = " + d + "kg";
-                buffer = "";
-                }
+            data.text = bait.ToString();
+
+            //if (buffer.Contains("M") && buffer.Contains("D"))
+            //{
+                //if (buffer.Contains("+"))
+                //    d = buffer.Split('+')[1].Split('k')[0];
+                //else if (buffer.Contains("-"))
+                //    d = buffer.Split('-')[1].Split('k')[0];
+                //else d = "0";
+
+                //try
+                //{
+                //    kg = Convert.ToInt32(d.Split(',')[0]);
+
+                //}
+                //catch
+                //{
+                //    kg = 0;
+                //}
+                //Debug.Log(kg);
+                //data.text = "M = " + d + "kg";
+                //buffer = "";
+                //}
         }
     }
 

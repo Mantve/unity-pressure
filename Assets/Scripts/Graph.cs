@@ -9,13 +9,13 @@ public class Graph : MonoBehaviour
     [SerializeField] public float graphHeight;
 
     LineRenderer newLineRenderer;
-    [SerializeField] int vertexAmount = 50;
+    public int vertexAmount = 100;
     [SerializeField] float xInterval;
 
     [SerializeField] GameObject parentCanvas;
     [SerializeField] Transform line;
    public List<int> data = new List<int>();
-   public  int maxV=100;
+   public  int maxV=40000;
     [SerializeField] int timer;
     PortHandler portdata;
     // Use this for initialization
@@ -23,6 +23,7 @@ public class Graph : MonoBehaviour
     
     void Start()
     {
+        Debug.LogError("This message will make the console appear in Development Builds");
         portdata = GameObject.Find("EventSystem").GetComponent<PortHandler>();
         parentCanvas = GameObject.Find("Canvas");
         line = transform.Find("Linerenderer");
@@ -43,7 +44,7 @@ public class Graph : MonoBehaviour
                                                                                    //   Draw(data);
                                                                                      // data.RemoveAt(0);
         //  int num = Mathf.Abs(data[data.Count-1] + Random.Range(-10, 10));
-        int num = portdata.kg;
+      //  int num = portdata.kg;
        // int num = Mathf.Abs((int)Input.mousePosition.y/10);
 
         /*  timer--;
@@ -75,7 +76,6 @@ public class Graph : MonoBehaviour
         for (int i = 0; i < vertexAmount && i < decibels.Count; i++)
         {
             int _index = i;
-
             float y = decibels[_index] * (graphHeight / maxV ); //(Divide grapheight with the maximum value of decibels.
             float x = i * xInterval;
             newLineRenderer.SetPosition(i, new Vector3(x - graphWidth / 2, y - graphHeight / 2, 0));

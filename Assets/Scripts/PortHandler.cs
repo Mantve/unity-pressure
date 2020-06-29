@@ -82,6 +82,7 @@ public class PortHandler : MonoBehaviour
             } else if (count == 100)
             {
                 csv.Finish();
+                count++;
             }
 
 

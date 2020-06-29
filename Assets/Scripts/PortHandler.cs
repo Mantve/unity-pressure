@@ -13,10 +13,13 @@ public class PortHandler : MonoBehaviour
     public Text data;
     public Text MReceived;
     public Text PortNotif;
+
     private SerialPort sp;
+
 
     private bool Connected;
     private bool read;
+
 
     private byte[] buffer;
 
@@ -44,12 +47,17 @@ public class PortHandler : MonoBehaviour
          if (sp.IsOpen && read && sp.BytesToRead > 1 )
          {
             Debug.Log("Open!");
-            buffer[1] = (byte)sp.ReadByte();
             buffer[0] = (byte)sp.ReadByte();
+            buffer[1] = (byte)sp.ReadByte();
 
             short bait = BitConverter.ToInt16(buffer, 0);
 
             data.text = bait.ToString();
+            kg = (int)bait;
+
+
+
+
 
             //if (buffer.Contains("M") && buffer.Contains("D"))
             //{
@@ -82,7 +90,8 @@ public class PortHandler : MonoBehaviour
             sp.Write("AT");
             MReceived.text = "Connected";
             Connected = true;
-           // read = sp.ReadLine();
+            // MReceived.text = sp.ReadLine();
+
         }
         else
         {
@@ -98,6 +107,8 @@ public class PortHandler : MonoBehaviour
             sp.Write("AT+CON"+Mac);
             read = true;
             MReceived.text = "Reading";
+            // MReceived.text = sp.ReadLine();
+            sp.DiscardInBuffer();
         }
         else
         {

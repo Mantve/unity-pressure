@@ -45,11 +45,16 @@ public class PortHandler : MonoBehaviour
             buffer += sp.ReadExisting();
             if (buffer.Contains("M") && buffer.Contains("D"))
             {
-                d = buffer.Split('+')[1].Split('k')[0];
+                if (buffer.Contains("+"))
+                    d = buffer.Split('+')[1].Split('k')[0];
+                else if (buffer.Contains("-"))
+                    d = buffer.Split('-')[1].Split('k')[0];
+                else d = "0";
 
                 try
                 {
                     kg = Convert.ToInt32(d.Split(',')[0]);
+
                 }
                 catch
                 {

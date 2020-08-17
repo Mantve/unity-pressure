@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private GameObject mainMenu;
+    [SerializeField]
+    private GameObject leaderboard;
+    [SerializeField]
+    private string newGameLevelName;
+
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!mainMenu.activeInHierarchy)
+            {
+                mainMenu.SetActive(true);
+                leaderboard.SetActive(false);
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnNewGameButtonClick()
     {
-        
+        LevelManager.Instance.LoadOnFullyFadded(newGameLevelName);
+    }
+    public void OnExitButtonClick()
+    {
+        Application.Quit();
     }
 }

@@ -10,6 +10,9 @@ public class Cart : MonoBehaviour
     /// </summary>
     public float mouse;
     public float zooms;
+
+    private Vector2 center;
+
     [System.Serializable]
     public class StatPowerup
     {
@@ -107,6 +110,7 @@ public class Cart : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody>();
         Ports= GameObject.Find("EventSystem").GetComponent<PortHandler>();
+        center = new Vector2(Screen.width/2, Screen.height/2);
     }
 
 
@@ -118,15 +122,25 @@ public class Cart : MonoBehaviour
         TickPowerups();
 
         // gather inputs
-       // float accel = Ports.kg;
-        float accel = ((int)Input.mousePosition.y / 10); 
-        mouse = (Input.mousePosition.y / 10);
+        // float accel = Ports.kg;
+        float x = Input.mousePosition.x;
+        float y = Input.mousePosition.y;
+
+        //float accel = ((int)Input.mousePosition.y / 300);
+
+        float direction = (x > center.x ? x - center.x : (center.x - x) * -1) / 10;
+        float accel = (y > center.y ? y - center.y :( center.y - y) * -1) / 10;
+        Debug.Log(direction);
+        Debug.Log(accel);
+
+        mouse = (Input.mousePosition.y / 300);
         zooms = Rigidbody.velocity.magnitude;
         //float turn = Input.x;
 
         if (canMove)
         {
-            MoveVehicle(accel, /*turn*/ 0);
+            MoveVehicle(accel, 0);
+            Rigidbody.transform.Rotate(new Vector3(0, direction, 0), 1f);
         }
 
     }
@@ -193,7 +207,7 @@ public class Cart : MonoBehaviour
         Vector3 movement = fwd * accelInput * finalAcceleration /* * GroundPercent*/;
 
         // simple suspension allows us to thrust forward even when on bumpy terrain
-      //  fwd.y = Mathf.Lerp(fwd.y, 0, finalStats.Suspension);
+        //  fwd.y = Mathf.Lerp(fwd.y, 0, finalStats.Suspension);
 
         // forward movement
         float currentSpeed = Rigidbody.velocity.magnitude;
@@ -207,13 +221,13 @@ public class Cart : MonoBehaviour
         adjustedVelocity.y = Rigidbody.velocity.y;
 
         //  clamp max speed if we are on ground
-      /* if (GroundPercent > 0)
-        {
-            if (adjustedVelocity.magnitude > maxSpeed && !wasOverMaxSpeed)
-            {
-                adjustedVelocity = Vector3.ClampMagnitude(adjustedVelocity, maxSpeed);
-            }
-        }*/
+        /* if (GroundPercent > 0)
+          {
+              if (adjustedVelocity.magnitude > maxSpeed && !wasOverMaxSpeed)
+              {
+                  adjustedVelocity = Vector3.ClampMagnitude(adjustedVelocity, maxSpeed);
+              }
+          }*/
 
         // coasting is when we aren't touching accelerate
         bool isCoasting = Mathf.Abs(accelInput) < .01f;
@@ -226,48 +240,50 @@ public class Cart : MonoBehaviour
 
         Rigidbody.velocity = adjustedVelocity;
 
-       
 
-     /*   if (GroundPercent > 0)
-        {
-            // manual angular velocity coefficient
-            float angularVelocitySteering = .4f;
-            float angularVelocitySmoothSpeed = 20f;
 
-            // turning is reversed if we're going in reverse and pressing reverse
-            if (!localVelDirectionIsFwd && !accelDirectionIsFwd) angularVelocitySteering *= -1;
-            var angularVel = Rigidbody.angularVelocity;
+        //if (GroundPercent > 0)
+        //{
+        //manual angular velocity coefficient
+        //float angularVelocitySteering = .4f;
+        //float angularVelocitySmoothSpeed = 20f;
 
-            // move the Y angular velocity towards our target
-            angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.deltaTime * angularVelocitySmoothSpeed);
+        ////turning is reversed if we're going in reverse and pressing reverse
+        //if (!localVelDirectionIsFwd && !accelDirectionIsFwd) angularVelocitySteering *= -1;
+        //var angularVel = Rigidbody.angularVelocity;
 
-            // apply the angular velocity
-            Rigidbody.angularVelocity = angularVel;
+        //// move the Y angular velocity towards our target
+        //angularVel.y = Mathf.MoveTowards(angularVel.y, turningPower * angularVelocitySteering, Time.deltaTime * angularVelocitySmoothSpeed);
 
-            // rotate rigidbody's velocity as well to generate immediate velocity redirection
-            // manual velocity steering coefficient
-            float velocitySteering = 25f;
-            // rotate our velocity based on current steer value
-            Rigidbody.velocity = Quaternion.Euler(0f, turningPower * velocitySteering * Time.deltaTime, 0f) * Rigidbody.velocity;
-        }*/
+        ////apply the angular velocity
+        //Rigidbody.angularVelocity = angularVel;
+
+        ////rotate rigidbody's velocity as well to generate immediate velocity redirection
+        //// manual velocity steering coefficient
+        //float velocitySteering = 25f;
+        ////rotate our velocity based on current steer value
+        //Rigidbody.velocity = Quaternion.Euler(0f, turningPower * velocitySteering * Time.deltaTime, 0f) * Rigidbody.velocity;
+    
+        
 
         // apply simplified lateral ground friction
         // only apply if we are on the ground at all
-    /*   if (GroundPercent > 0f)
-        {
-            // manual grip coefficient scalar
-            float gripCoeff = 30f;
-            // what direction is our lateral friction in?
-            // it is the direction the wheels are turned, our forward
-            Vector3 latFrictionDirection = Vector3.Cross(fwd, transform.up);
-            // how fast are we currently moving in our friction direction?
-            float latSpeed = Vector3.Dot(Rigidbody.velocity, latFrictionDirection);
-            // apply the damping
-            Vector3 latFrictionDampedVelocity = Rigidbody.velocity - latFrictionDirection * latSpeed * finalStats.Grip * gripCoeff * Time.deltaTime;
+         //if (GroundPercent > 0f)
+         //   {
+         //       // manual grip coefficient scalar
+         //       float gripCoeff = 30f;
+         //       // what direction is our lateral friction in?
+         //       // it is the direction the wheels are turned, our forward
+         //       Vector3 latFrictionDirection = Vector3.Cross(fwd, transform.up);
+         //       // how fast are we currently moving in our friction direction?
+         //       float latSpeed = Vector3.Dot(Rigidbody.velocity, latFrictionDirection);
+         //       // apply the damping
+         //       Vector3 latFrictionDampedVelocity = Rigidbody.velocity - latFrictionDirection * latSpeed * finalStats.Grip * gripCoeff * Time.deltaTime;
 
-            // apply the damped velocity
-            Rigidbody.velocity = latFrictionDampedVelocity;
-        }*/
+         //       // apply the damped velocity
+         //       Rigidbody.velocity = latFrictionDampedVelocity;
+         //   }
+
     }
 
     public void AddPowerup(StatPowerup statPowerup)

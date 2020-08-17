@@ -15,7 +15,7 @@ public class FPS : MonoBehaviour
         if (Time.unscaledTime > _timer)
         {
             int fps = (int)(1f / Time.unscaledDeltaTime);
-            _fpsText.text = "FPS: " + fps+ "   ms:" + Time.unscaledDeltaTime*1000;
+            _fpsText.text = "FPS: " + fps+ "   ms:" + Time.unscaledDeltaTime*1000 + "    x: " + Input.mousePosition.x + "    y: " + Input.mousePosition.y;
             _timer = Time.unscaledTime + _hudRefreshRate;
         }
     }

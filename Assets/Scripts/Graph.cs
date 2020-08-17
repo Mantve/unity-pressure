@@ -69,14 +69,14 @@ public class Graph : MonoBehaviour
                                                                                     // data.Add(num);
     }
 
-    public void Draw(List<int> decibels)
+    public void Draw(List<int> values)
     {
-        if (decibels.Count == 0)
+        if (values.Count == 0)
             return;
-        for (int i = 0; i < vertexAmount && i < decibels.Count; i++)
+        for (int i = 0; i < vertexAmount && i < values.Count; i++)
         {
             int _index = i;
-            float y = decibels[_index] * (graphHeight / maxV ); //(Divide grapheight with the maximum value of decibels.
+            float y = values[_index] * (graphHeight / maxV ); //(Divide grapheight with the maximum value of decibels.
             float x = i * xInterval;
             newLineRenderer.SetPosition(i, new Vector3(x - graphWidth / 2, y - graphHeight / 2, 0));
 

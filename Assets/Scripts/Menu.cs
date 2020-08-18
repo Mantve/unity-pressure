@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField] GameObject PortRenderer ;
+    [SerializeField]
+    private GameObject PortRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        PortRenderer = GameObject.Find("PortRenderer");
+        if(PortRenderer == null)
+            PortRenderer = GameObject.Find("PortRenderer");
+        PortRenderer.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnGUI()
     {
-        if(Input.GetButtonDown("Cancel"))
-        {
-            PortRenderer.active = !PortRenderer.active;
-        }
+        if (Event.current.Equals(Event.KeyboardEvent(KeyCode.Escape.ToString())))
+            PortRenderer.SetActive(!PortRenderer.activeSelf);
     }
 }

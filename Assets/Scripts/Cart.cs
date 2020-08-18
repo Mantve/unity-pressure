@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class Cart : MonoBehaviour
     public float zooms;
 
     private Vector2 center;
+    private float rotation;
 
     [System.Serializable]
     public class StatPowerup
@@ -122,27 +124,30 @@ public class Cart : MonoBehaviour
         TickPowerups();
 
         // gather inputs
+
         // float accel = Ports.kg;
-        float x = Input.mousePosition.x;
-        float y = Input.mousePosition.y;
-
-        //float accel = ((int)Input.mousePosition.y / 300);
-
-        float direction = (x > center.x ? x - center.x : (center.x - x) * -1) / 10;
-        float accel = (y > center.y ? y - center.y :( center.y - y) * -1) / 10;
-        Debug.Log(direction);
-        Debug.Log(accel);
-
-        mouse = (Input.mousePosition.y / 300);
+        float accel = Input.mousePosition.y / 500;
+        mouse = (Input.mousePosition.y / 20);
         zooms = Rigidbody.velocity.magnitude;
         //float turn = Input.x;
 
         if (canMove)
         {
             MoveVehicle(accel, 0);
-            Rigidbody.transform.Rotate(new Vector3(0, direction, 0), 1f);
+            Rotate();
         }
 
+    }
+
+    void Rotate()
+    {
+        float x = Input.mousePosition.x;
+        float y = Input.mousePosition.y;
+        //float accel = (y > center.y ? y - center.y :( center.y - y) * -1) / 10;
+        float direction = (x > center.x ? x - center.x : (center.x - x) * -1) / 10;
+        float offset = x > center.x ? (x - center.x) / center.x : -1 * (center.x - x) / center.x;
+        rotation = offset * 90;
+        Rigidbody.transform.Rotate(new Vector3(0, rotation, 0), Math.Abs(offset));
     }
 
     void TickPowerups()

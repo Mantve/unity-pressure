@@ -9,6 +9,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject leaderboard;
     [SerializeField]
+    private GameObject settings;
+    [SerializeField]
     private string newGameLevelName;
 
     private void Update()
@@ -19,6 +21,7 @@ public class MainMenuManager : MonoBehaviour
             {
                 mainMenu.SetActive(true);
                 leaderboard.SetActive(false);
+                settings.SetActive(false);
             }
         }
     }
